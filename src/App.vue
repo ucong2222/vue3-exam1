@@ -1,5 +1,7 @@
 <template>
-  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Odit quos tempore quasi modi, aliquam, harum reprehenderit distinctio dicta expedita autem delectus laudantium cumque, placeat dignissimos ratione omnis tenetur? Deserunt, consequuntur.
+  <div class="container mx-auto bg-red-500">
+    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Odit quos tempore quasi modi, aliquam, harum reprehenderit distinctio dicta expedita autem delectus laudantium cumque, placeat dignissimos ratione omnis tenetur? Deserunt, consequuntur.
+  </div>
 </template>
 
 <script lang="ts">
