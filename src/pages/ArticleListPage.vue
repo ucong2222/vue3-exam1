@@ -56,13 +56,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive} from 'vue'
+import { defineComponent, ref, reactive, getCurrentInstance, onMounted} from 'vue'
 import { Article } from '../dtos/'
-
+import { IArticle } from '../types/'
+import { MainApi } from '../apis/'
 
 export default defineComponent({
   name: 'ArticleListPage',
   setup() {
+    const mainApi:MainApi = getCurrentInstance()?.appContext.config.globalProperties.$mainApi;
+    
+    function loadArticles() {
+      mainApi.article_list(1)
+      .then(axiosResponse => {
+        console.log(axiosResponse.data.body.articles);
+      });
+    }
+    onMounted(loadArticles);
+
     const newAricleTitleElRef = ref<HTMLInputElement>();
     const newAricleBodyElRef = ref<HTMLInputElement>();
 
