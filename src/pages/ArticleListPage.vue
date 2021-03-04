@@ -81,7 +81,9 @@ export default defineComponent({
       });
     }
     onMounted(() => {
-      loadArticles(1);
+      const boardId:number = parseInt(route.query.boardId as string ?? "1");
+       
+      loadArticles(boardId);
     });
 
     function checkAndWriteArticle(){
