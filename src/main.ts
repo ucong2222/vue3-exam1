@@ -23,8 +23,15 @@ const mainApi = new MainApi();
 
 // 라우팅 정보 구성
 const routes = [
-  { path: '/', component : HomeMainPage },
-  { path: '/article/list', component : ArticleListPage },
+  {
+    path: '/',
+    component: HomeMainPage,
+  },
+  {
+    path: '/article/list',
+    component: ArticleListPage,
+    props: (route:any) => ({ boardId: route.query.boardId })
+  },
 ];
 
 // 라우터 생성
