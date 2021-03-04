@@ -91,6 +91,7 @@ export interface MainApi__article_detail__IResponseBody extends Base__IResponseB
   };
 }
 
+// /usr/article/write 의 응답 타입
 export interface MainApi__article_doWrite__IResponseBody extends Base__IResponseBodyType1 {
   body:{
     id: number
