@@ -95,7 +95,11 @@ export default defineComponent({
       type: Number,
       required: true,
       default:1
-    }
+    },
+    globalShare: {
+      type: Object,
+      required: true
+    },
   },
   setup(props) {
     const mainApi:MainApi = getCurrentInstance()?.appContext.config.globalProperties.$mainApi;

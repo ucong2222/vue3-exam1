@@ -47,11 +47,15 @@ import { MainApi } from '../apis/'
 export default defineComponent({
   name: 'ArticleListPage',
   props: {
+    globalShare: {
+      type: Object,
+      required: true
+    },
     boardId: {
       type: Number,
       required: true,
       default:1
-    }
+    },
   },
   setup(props) {
     const mainApi:MainApi = getCurrentInstance()?.appContext.config.globalProperties.$mainApi;
