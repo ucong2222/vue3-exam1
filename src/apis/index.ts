@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import {IArticle} from '../types'
+import {IArticle, IMember} from '../types'
 
 // API 원형
 abstract class HttpClient {
@@ -73,6 +73,10 @@ abstract class HttpClient {
   public post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R> {
     return this.instance.post(url, data, config);
   }
+
+  public get<T = any, R = AxiosResponse<T>>(url: string, config?: AxiosRequestConfig): Promise<R> {
+    return this.instance.get(url, config);
+  }
 }
 
 // 응답타입1
@@ -113,9 +117,7 @@ export interface MainApi__article_doWrite__IResponseBody extends Base__IResponse
 export interface MainApi__member_authKey__IResponseBody extends Base__IResponseBodyType1 {
   body:{
     authKey: string,
-    id: number,
-    name: string,
-    nickname: string
+    member: IMember,
   };
 }
 
@@ -149,6 +151,7 @@ export class MainApi extends HttpClient {
       localStorage.removeItem("loginedMemberId");
       localStorage.removeItem("loginedMemberName");
       localStorage.removeItem("loginedMemberNickname");
+      localStorage.removeItem("loginedMemberProfileImgUrl");
 
       location.replace('/member/login');
     }
@@ -158,12 +161,12 @@ export class MainApi extends HttpClient {
 
   // http://localhost:8021/usr/article/list?boardId=? 를 요청하고 응답을 받아오는 함수
   public article_list(boardId: number) {
-    return this.instance.get<MainApi__article_list__IResponseBody>(`/usr/article/list?boardId=${boardId}`);
+    return this.get<MainApi__article_list__IResponseBody>(`/usr/article/list?boardId=${boardId}`);
   }
 
   // http://localhost:8021/usr/detail/id=? 를 요청하고 응답을 받아오는 함수
   public article_detail(id: number) {
-    return this.instance.get<MainApi__article_detail__IResponseBody>(`/usr/article/detail?id=${id}`);
+    return this.get<MainApi__article_detail__IResponseBody>(`/usr/article/detail?id=${id}`);
   }
 
   public article_doWrite(boardId:number, title: string, body: string) {
@@ -177,7 +180,13 @@ export class MainApi extends HttpClient {
   }
 
   public member_authKey(loginId:string, loginPw:string) {
-    return this.instance.get<MainApi__member_authKey__IResponseBody>(`/usr/member/authKey?loginId=${loginId}&loginPw=${loginPw}`);
+    return this.postByForm<MainApi__member_authKey__IResponseBody>(
+      `/usr/member/authKey`,
+      {
+        loginId,
+        loginPw
+      }
+    );
   }
 
   public member_doJoin(loginId:string, loginPw:string, name:string, nickname:string, cellphoneNo:string, email:string, genFileIdsStr:string) {
