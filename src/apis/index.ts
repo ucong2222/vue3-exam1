@@ -69,6 +69,10 @@ abstract class HttpClient {
 
     return this.instance.post(url, params, config);
   }
+
+  public post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R> {
+    return this.instance.post(url, data, config);
+  }
 }
 
 // 응답타입1
@@ -77,6 +81,12 @@ interface Base__IResponseBodyType1 {
   msg:string;
   fail:boolean;
   success:boolean;
+}
+
+export interface MainApi__common_genFile_doUpload__IResponseBody extends Base__IResponseBodyType1 {
+  body:{
+    genFileIdsStr: string,
+  };
 }
 
 // /usr/article/list 의 응답 타입
@@ -120,7 +130,7 @@ export class MainApi extends HttpClient {
   public constructor() {
     super(
       axios.create({
-        baseURL:'http://localhost:8021/usr/',
+        baseURL:'http://localhost:8021/',
       })
     );
   }
@@ -148,17 +158,17 @@ export class MainApi extends HttpClient {
 
   // http://localhost:8021/usr/article/list?boardId=? 를 요청하고 응답을 받아오는 함수
   public article_list(boardId: number) {
-    return this.instance.get<MainApi__article_list__IResponseBody>(`/article/list?boardId=${boardId}`);
+    return this.instance.get<MainApi__article_list__IResponseBody>(`/usr/article/list?boardId=${boardId}`);
   }
 
   // http://localhost:8021/usr/detail/id=? 를 요청하고 응답을 받아오는 함수
   public article_detail(id: number) {
-    return this.instance.get<MainApi__article_detail__IResponseBody>(`/article/detail?id=${id}`);
+    return this.instance.get<MainApi__article_detail__IResponseBody>(`/usr/article/detail?id=${id}`);
   }
 
   public article_doWrite(boardId:number, title: string, body: string) {
     return this.postByForm<MainApi__article_doWrite__IResponseBody>(
-      `/article/doAdd`, {
+      `/usr/article/doAdd`, {
         boardId,
         title,
         body
@@ -167,19 +177,28 @@ export class MainApi extends HttpClient {
   }
 
   public member_authKey(loginId:string, loginPw:string) {
-    return this.instance.get<MainApi__member_authKey__IResponseBody>(`/member/authKey?loginId=${loginId}&loginPw=${loginPw}`);
+    return this.instance.get<MainApi__member_authKey__IResponseBody>(`/usr/member/authKey?loginId=${loginId}&loginPw=${loginPw}`);
   }
 
-  public member_doJoin(loginId:string, loginPw:string, name:string, nickname:string, cellphoneNo:string, email:string) {
+  public member_doJoin(loginId:string, loginPw:string, name:string, nickname:string, cellphoneNo:string, email:string, genFileIdsStr:string) {
     return this.postByForm<MainApi__member_doJoin__IResponseBody>(
-      `/member/doJoin`, {
+      `/usr/member/doJoin`, {
         loginId,
         loginPw,
         name,
         nickname,
         cellphoneNo,
-        email
+        email,
+        genFileIdsStr
       }
+    );
+  }
+
+  public common_genFile_doUpload(profileImg:File) {
+    const formDate = new FormData();
+    formDate.append("file__member__0__common__attachment__1", profileImg);
+    return this.post<MainApi__common_genFile_doUpload__IResponseBody>(
+      `/common/genFile/doUpload`, formDate
     );
   }
 } 
